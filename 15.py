@@ -72,39 +72,60 @@ puzzle = puzzle.strip().splitlines()
 
 x_max = len(puzzle[0])
 y_max = len(puzzle)
-y_antennas = defaultdict(lambda: defaultdict(set))
+# y_antennas = defaultdict(lambda: defaultdict(set))
+#
+# for y in range(y_max):
+#     for x in range(x_max):
+#         if puzzle[y][x] != '.':
+#             y_antennas[puzzle[y][x]][y].add(x)
+#
+# positions = set()
+# for y in range(y_max):
+#     for x in range(x_max):
+#         distance = int((max(y_max-y-1, y-0) + 1) / 2)
+#         for diff in range(0, distance):
+#             y_low = y - diff
+#             y_low_t = y_low - diff
+#             y_high = y + diff
+#             y_high_t = y_high + diff
+#
+#             for ant_type, antennas in y_antennas.items():
+#                 if y_low_t >= 0:
+#                     curr_row_antennas = antennas[y_low]
+#                     twice_row_antennas = antennas[y_low_t]
+#                     for ant_x in curr_row_antennas:
+#                         twice_x = (x + (ant_x - x) * 2)
+#                         if ant_x != twice_x and twice_x in twice_row_antennas:
+#                             positions.add((y, x))
+#
+#                 if y_high_t < y_max:
+#                     curr_row_antennas = antennas[y_high]
+#                     twice_row_antennas = antennas[y_high_t]
+#                     for ant_x in curr_row_antennas:
+#                         twice_x = (x + (ant_x - x) * 2)
+#                         if ant_x != twice_x and twice_x in twice_row_antennas:
+#                             positions.add((y, x))
+
+ant_types = defaultdict(list)
 
 for y in range(y_max):
     for x in range(x_max):
         if puzzle[y][x] != '.':
-            y_antennas[puzzle[y][x]][y].add(x)
+            ant_types[puzzle[y][x]].append((y, x))
 
 positions = set()
-for y in range(y_max):
-    for x in range(x_max):
-        distance = int((max(y_max-y-1, y-0) + 1) / 2)
-        for diff in range(0, distance):
-            y_low = y - diff
-            y_low_t = y_low - diff
-            y_high = y + diff
-            y_high_t = y_high + diff
+for ant_positions in ant_types.values():
+    for i in range(len(ant_positions)):
+        curr_pos = ant_positions[i]
+        for other_ant in ant_positions[i+1:]:
+            diff = (curr_pos[0]-other_ant[0], curr_pos[1]-other_ant[1])
+            y, x = (curr_pos[0]+diff[0], curr_pos[1]+diff[1])
+            if not (y < 0 or y >= y_max or x < 0 or x >= x_max):
+                positions.add((y, x))
 
-            for ant_type, antennas in y_antennas.items():
-                if y_low_t >= 0:
-                    curr_row_antennas = antennas[y_low]
-                    twice_row_antennas = antennas[y_low_t]
-                    for ant_x in curr_row_antennas:
-                        twice_x = (x + (ant_x - x) * 2)
-                        if ant_x != twice_x and twice_x in twice_row_antennas:
-                            positions.add((y, x))
-
-                if y_high_t < y_max:
-                    curr_row_antennas = antennas[y_high]
-                    twice_row_antennas = antennas[y_high_t]
-                    for ant_x in curr_row_antennas:
-                        twice_x = (x + (ant_x - x) * 2)
-                        if ant_x != twice_x and twice_x in twice_row_antennas:
-                            positions.add((y, x))
-
+            diff = (-diff[0], -diff[1])
+            y, x = (other_ant[0]+diff[0], other_ant[1]+diff[1])
+            if not (y < 0 or y >= y_max or x < 0 or x >= x_max):
+                positions.add((y, x))
 
 print(len(positions))
