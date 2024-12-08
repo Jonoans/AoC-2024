@@ -152,16 +152,11 @@ x_oob = lambda coord: coord[0] < 0 or coord[0] >= x_max
 y_oob = lambda coord: coord[1] < 0 or coord[1] >= y_max
 
 guard_position = (-1, -1)
-obstacle_x = defaultdict(set)
-obstacle_y = defaultdict(set)
 for x in range(x_max):
     for y in range(y_max):
         if puzzle[x][y] == '^':
             guard_position = (x, y)
             break
-        elif puzzle[x][y] == '#':
-            obstacle_x[x].add(y)
-            obstacle_y[y].add(x)
 
     if guard_position != (-1, -1):
         break
