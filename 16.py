@@ -72,13 +72,11 @@ puzzle = puzzle.strip().splitlines()
 
 x_max = len(puzzle[0])
 y_max = len(puzzle)
-y_antennas = defaultdict(lambda: defaultdict(set))
 ant_types = defaultdict(list)
 
 for y in range(y_max):
     for x in range(x_max):
         if puzzle[y][x] != '.':
-            y_antennas[puzzle[y][x]][y].add(x)
             ant_types[puzzle[y][x]].append((y, x))
 
 positions = set()
