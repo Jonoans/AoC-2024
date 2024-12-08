@@ -82,32 +82,6 @@ for y in range(y_max):
             ant_types[puzzle[y][x]].append((y, x))
 
 positions = set()
-for y in range(y_max):
-    for x in range(x_max):
-        distance = int((max(y_max-y-1, y-0) + 1) / 2)
-        for diff in range(0, distance):
-            y_low = y - diff
-            y_low_t = y_low - diff
-            y_high = y + diff
-            y_high_t = y_high + diff
-
-            for ant_type, antennas in y_antennas.items():
-                if y_low_t >= 0:
-                    curr_row_antennas = antennas[y_low]
-                    twice_row_antennas = antennas[y_low_t]
-                    for ant_x in curr_row_antennas:
-                        twice_x = (x + (ant_x - x) * 2)
-                        if ant_x != twice_x and twice_x in twice_row_antennas:
-                            positions.add((y, x))
-
-                if y_high_t < y_max:
-                    curr_row_antennas = antennas[y_high]
-                    twice_row_antennas = antennas[y_high_t]
-                    for ant_x in curr_row_antennas:
-                        twice_x = (x + (ant_x - x) * 2)
-                        if ant_x != twice_x and twice_x in twice_row_antennas:
-                            positions.add((y, x))
-
 for ant_positions in ant_types.values():
     for i in range(len(ant_positions)):
         curr_pos = ant_positions[i]
